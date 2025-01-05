@@ -1,7 +1,9 @@
 #pragma once
+#include <type_traits>
 #include <cmath>
 #include <random>
 
+using std::is_integral_v;
 using std::uniform_int_distribution;
 using std::ceil;
 using std::sqrt;
@@ -70,7 +72,7 @@ inline int sgn(T x) {
  * @returns true if x is a power of 2
  */
 template <class T>
-constexpr bool isPow2(T x) noexcept {
+inline constexpr bool isPow2(T x) noexcept {
   return !(x & (x-1));
 }
 
@@ -81,7 +83,7 @@ constexpr bool isPow2(T x) noexcept {
  * @returns previous power of 2 of x
  */
 template <class T>
-constexpr T prevPow2(T x) noexcept {
+inline constexpr T prevPow2(T x) noexcept {
   return 1 << T(log2(x));
 }
 
@@ -92,7 +94,8 @@ constexpr T prevPow2(T x) noexcept {
  * @returns next power of 2 of x
  */
 template <class T>
-constexpr T nextPow2(T x) noexcept {
+inline constexpr T nextPow2(T x) noexcept {
+  if (is_integral_v<T>) return T(1) << (8*sizeof(T) - __builtin_clz(x));
   return 1 << T(ceil(log2(x)));
 }
 #pragma endregion
